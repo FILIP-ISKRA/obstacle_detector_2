@@ -10,7 +10,7 @@ def generate_launch_description():
         cmd=[
             'ros2', 'bag', 'play',
             '/workspace/rosbags/rosbag2_2026_09_01-19_13_35',
-            '--loop',
+            # '--loop',
             # '--topics', '/scan',
             # '--rate', '0.2',
         ],
