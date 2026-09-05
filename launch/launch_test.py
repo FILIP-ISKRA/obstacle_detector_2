@@ -3,6 +3,7 @@ from launch.actions import ExecuteProcess, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.substitutions import FindPackageShare
 import os
+from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     rosbag_play = ExecuteProcess(
@@ -19,8 +20,8 @@ def generate_launch_description():
     obstacle_extractor = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
-                '/workspace/obstacle_detector_2/launch',
-                'launch.py'
+                get_package_share_directory("obstacle_detector")
+                + "/launch/launch.py"
             )
         )
     )
