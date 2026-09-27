@@ -24,11 +24,7 @@ def generate_launch_description():
             'radius_enlargement': 0.1,
             'frame_id': 'odom',
             'use_sim_time': True,
-        }],
-        remappings=[
-            ('scan', '/scan'),
-            ('raw_obstacles', '/raw_obstacles'),
-        ]
+        }]
     )
 
     obstacle_tracker = Node(
@@ -48,12 +44,7 @@ def generate_launch_description():
             'measurement_variance': 0.05,
             'frame_id': 'odom',
             'use_sim_time': True,
-        }],
-        remappings=[
-            ('raw_obstacles', '/raw_obstacles'),
-            ('tracked_obstacles', '/tracked_obstacles'),
-            ('/odom', '/odometry/filtered'),
-        ]
+        }]
     )
 
     return LaunchDescription([

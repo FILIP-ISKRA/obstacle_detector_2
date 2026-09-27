@@ -17,16 +17,16 @@ def generate_launch_description():
         output='screen',
     )
 
-    obstacle_extractor = IncludeLaunchDescription(
+    obstacle_detector = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory("obstacle_detector")
-                + "/launch/launch.py"
+                + "/launch/launch_test.py"
             )
         )
     )
 
     return LaunchDescription([
         rosbag_play,
-        obstacle_extractor,
+        obstacle_detector,
     ])
