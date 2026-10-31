@@ -124,6 +124,7 @@ private:
   bool p_use_scan_;
   bool p_use_pcl_;
   bool p_use_pcl_2_;
+  bool p_publish_visualization_;
 
   bool p_use_split_and_merge_;
   bool p_circles_from_visibles_;

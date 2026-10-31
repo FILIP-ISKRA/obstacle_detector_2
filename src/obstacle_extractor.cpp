@@ -93,6 +93,7 @@ void ObstacleExtractor::updateParamsUtil(){
   nh_->get_parameter_or("use_scan", p_use_scan_, true);
   nh_->get_parameter_or("use_pcl", p_use_pcl_, true);
   nh_->get_parameter_or("use_pcl2", p_use_pcl_2_, true);
+  nh_->get_parameter_or("publish_visualization", p_publish_visualization_, true);
   nh_->get_parameter_or("use_split_and_merge", p_use_split_and_merge_, true);
   nh_->get_parameter_or("circles_from_visibles", p_circles_from_visibles_, true);
   nh_->get_parameter_or("discard_converted_segments", p_discard_converted_segments_, true);
@@ -129,7 +130,9 @@ void ObstacleExtractor::updateParamsUtil(){
             "pcl2", 10, std::bind(&ObstacleExtractor::pcl2Callback, this, std::placeholders::_1));
       }
       obstacles_pub_ = nh_->create_publisher<obstacle_detector::msg::Obstacles>("raw_obstacles", 10);
-      obstacles_vis_pub_ = nh_->create_publisher<visualization_msgs::msg::MarkerArray>("raw_obstacles_visualization", 10);
+      if (p_publish_visualization_) {
+        obstacles_vis_pub_ = nh_->create_publisher<visualization_msgs::msg::MarkerArray>("raw_obstacles_visualization", 10);
+      }
     }
     else {
       // Send empty message
@@ -218,7 +221,9 @@ void ObstacleExtractor::processPoints() {
 
   transformObstacles();
   publishObstacles();
-  publishVisualizationObstacles();
+  if (p_publish_visualization_) {
+    publishVisualizationObstacles();
+  }
 
   input_points_.clear();
 }

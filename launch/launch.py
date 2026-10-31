@@ -1,7 +1,21 @@
 from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 def generate_launch_description():
+    visualization_enabled = LaunchConfiguration('visualization')
+    # laser_tf = Node(
+    #     package='tf2_ros',
+    #     executable='static_transform_publisher',
+    #     name='laser_frame_broadcaster',
+    #     arguments=[
+    #         '--x', '0', '--y', '0', '--z', '0.065',
+    #         '--qx', '0', '--qy', '0', '--qz', '0', '--qw', '1',
+    #         '--frame-id', 'base_link', '--child-frame-id', 'laser',
+    #     ],
+    # )
+
     obstacle_extractor = Node(
         package='obstacle_detector',
         executable='obstacle_extractor_node',
@@ -23,7 +37,8 @@ def generate_launch_description():
             'max_circle_radius': 0.6,
             'radius_enlargement': 0.1,
             'frame_id': 'odom',
-            'use_sim_time': True,
+            'use_sim_time': False,
+            'publish_visualization': visualization_enabled,
         }],
         remappings=[
             ('scan', '/scan'),
@@ -47,7 +62,8 @@ def generate_launch_description():
             'process_rate_variance': 0.2,
             'measurement_variance': 0.05,
             'frame_id': 'odom',
-            'use_sim_time': True,
+            'use_sim_time': False,
+            'publish_visualization': visualization_enabled,
         }],
         remappings=[
             ('raw_obstacles', '/raw_obstacles'),
@@ -57,6 +73,11 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        DeclareLaunchArgument(
+            'visualization',
+            default_value='true',
+            description='Publish obstacle visualization markers',
+        ),
         obstacle_extractor,
         obstacle_tracker,
     ])

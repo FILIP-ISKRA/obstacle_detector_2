@@ -125,6 +125,7 @@ private:
   bool p_active_;
   bool p_copy_segments_;
   bool p_compensate_robot_velocity_;
+  bool p_publish_visualization_;
 
   double p_tracking_duration_;
   double p_loop_rate_;

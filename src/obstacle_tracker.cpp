@@ -81,6 +81,7 @@ void ObstacleTracker::updateParamsUtil(){
   nh_->get_parameter_or("active", p_active_, true);
   nh_->get_parameter_or("copy_segments", p_copy_segments_, true);
   nh_->get_parameter_or("compensate_robot_velocity", p_compensate_robot_velocity_, false);
+  nh_->get_parameter_or("publish_visualization", p_publish_visualization_, true);
   nh_->get_parameter_or("sensor_rate", p_sensor_rate_, 10.0);
   nh_->get_parameter_or("loop_rate", p_loop_rate_, 100.0);
   nh_->get_parameter_or("frame_id", p_frame_id_, string("map"));
@@ -113,7 +114,9 @@ void ObstacleTracker::updateParamsUtil(){
       obstacles_sub_ = nh_->create_subscription<obstacle_detector::msg::Obstacles>(
             "raw_obstacles", 10, std::bind(&ObstacleTracker::obstaclesCallback, this, std::placeholders::_1));
       obstacles_pub_ = nh_->create_publisher<obstacle_detector::msg::Obstacles>("tracked_obstacles", 10);
-      obstacles_vis_pub_ = nh_->create_publisher<visualization_msgs::msg::MarkerArray>("tracked_obstacles_visualization", 10);
+      if (p_publish_visualization_) {
+        obstacles_vis_pub_ = nh_->create_publisher<visualization_msgs::msg::MarkerArray>("tracked_obstacles_visualization", 10);
+      }
     }
     else {
       // Send empty message
@@ -139,7 +142,9 @@ void ObstacleTracker::updateParams(const std::shared_ptr<rmw_request_id_t> reque
 void ObstacleTracker::timerCallback() {
   updateObstacles();
   publishObstacles();
-  publishVisualizationObstacles();
+  if (p_publish_visualization_) {
+    publishVisualizationObstacles();
+  }
 }
 
 void ObstacleTracker::odomCallback(const nav_msgs::msg::Odometry::ConstSharedPtr& msg)
